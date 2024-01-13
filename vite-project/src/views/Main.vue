@@ -1,54 +1,38 @@
 <template>
-    <div class="common-layout">
-      <el-container class="el-container lay-container">
-        <commen-aside/>
-        <el-container class="r-container">
-          <commen-header/>
-          <el-main>
-            <router-view/>
-          </el-main>
-        </el-container>
+  <div class="common-layout">
+    <el-container class="el-container lay-container">
+      <commen-aside class="el-aside" />
+      <el-container class="r-container">
+        <commen-header />
+        <el-main>
+          <router-view />
+        </el-main>
       </el-container>
-    </div>
-  </template>
-  
+    </el-container>
+  </div>
+</template>
 
-<script>
-import { defineComponent } from 'vue'
-import CommenHeader from '../components/CommenHeader.vue';
-import CommenAside from '../components/CommenAside.vue';
-
-export default defineComponent({
-  components:{
-    CommenHeader,
-    CommenAside,
-  },
-});
+<script setup lang="ts">
+import CommenHeader from "../components/CommenHeader.vue";
+import CommenAside from "../components/CommenAside.vue";
 </script>
 
-<style lang="less" scoped>
-.r-container{
+<style lang="scss" scoped>
+.r-container {
   flex-wrap: wrap;
 }
-.common-layout{
+.common-layout {
   height: 100%;
-  & > .el-container{
+  & > .el-container {
     height: 100%;
-    & > .el-aside{
+    & > .el-aside {
       height: 100%;
-      background-color: #545c64;
-      & > .el-menu{
-        height: 100%;
-        background-color: #545c64;
-      }
+      background-color: #545c54;
     }
   }
-
 }
-.el-container{
+.el-container {
   height: 100%;
   align-content: flex-start;
 }
-
-
 </style>

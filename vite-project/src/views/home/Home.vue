@@ -51,25 +51,30 @@
   </el-row>
 </template>
 <script setup lang="ts">
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
 const tableLabel = {
   name: '课程',
   todayBuy: '今日购买',
   monthBuy: '本月购买',
   totalBuy: '总购买'
-}
-const tableData = ref([])
+};
+const tableData = ref([]);
 const getTableList = async () => {
-  await axios.get('/home/getData').then((res) => {
-    tableData.value = res.data.data.tableData
-  })
-}
+  await axios
+    .get(
+      'https://www.fastmock.site/mock/93f1f55bc4718d6e552e53225ee15530/api/home/getTableData'
+    )
+    .then((res) => {
+      console.log(res);
+      tableData.value = res.data.data;
+    });
+};
 
 onMounted(() => {
-  getTableList()
-})
+  getTableList();
+});
 </script>
 <style lang="scss" scoped>
 .home {

@@ -47,13 +47,33 @@
     <el-col
       :span="16"
       style="margin-top: 20px"
-    ></el-col>
+    >
+      <div class="flex count-card-list">
+        <el-card
+          :body-style="{ display: 'flex', padding: 0 }"
+          v-for="item in countData"
+          :key="item.name"
+        >
+          <component
+            class="icons"
+            :is="item.icon"
+            :style="{ background: item.color }"
+          ></component>
+          <div class="count-p">
+            <p class="num">￥{{ item.value }}</p>
+            <p class="num-remark">{{ item.name }}</p>
+          </div>
+        </el-card>
+      </div>
+    </el-col>
   </el-row>
 </template>
 <script setup lang="ts">
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
-
+import {
+  getTableData,
+  getCountData
+} from '/CS/vue_manage/vite-project/src/api/api';
 const tableLabel = {
   name: '课程',
   todayBuy: '今日购买',
@@ -61,19 +81,22 @@ const tableLabel = {
   totalBuy: '总购买'
 };
 const tableData = ref([]);
-const getTableList = async () => {
-  await axios
-    .get(
-      'https://www.fastmock.site/mock/93f1f55bc4718d6e552e53225ee15530/api/home/getTableData'
-    )
-    .then((res) => {
-      console.log(res);
-      tableData.value = res.data.data;
-    });
-};
+const countData = ref<any[]>([]);
+// const getTableList = async () => {
+//   await axios
+//     .get(
+//       'https://mock.presstime.cn/mock/65d36e6ca07c65d1ba4511c4/api/home/getTableData'
+//     )
+//     .then((res) => {
+//       console.log(res);
+//       tableData.value = res.data.data.tableData;
+//     });
+// };
 
-onMounted(() => {
-  getTableList();
+onMounted(async () => {
+  tableData.value = await getTableData({});
+  countData.value = await getCountData({});
+  console.log(countData);
 });
 </script>
 <style lang="scss" scoped>
@@ -104,6 +127,38 @@ onMounted(() => {
         margin-left: 60px;
       }
     }
+  }
+}
+.flex {
+  display: flex;
+}
+.count-card-list {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .el-card {
+    width: 32%;
+    height: 80px;
+    margin-bottom: 20px;
+    .count-p {
+      margin-left: 10px;
+    }
+    .num {
+      font-size: 24px;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+    .num-remark {
+      font-size: 15px;
+      color: #999;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+  }
+  .icons {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
   }
 }
 </style>

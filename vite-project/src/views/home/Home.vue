@@ -65,6 +65,26 @@
           </div>
         </el-card>
       </div>
+      <el-card style="height: 280px">
+        <div
+          id="echart"
+          style="height: 280px"
+        ></div>
+      </el-card>
+      <div class="flex small-charts">
+        <el-card style="height: 280px; width: 49%">
+          <div
+            id="Lechart"
+            style="width: 500px; height: 280px"
+          ></div>
+        </el-card>
+        <el-card style="height: 280px; width: 49%">
+          <div
+            id="Rechart"
+            style="width: 500px; height: 280px"
+          ></div>
+        </el-card>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -72,8 +92,10 @@
 import { onMounted, ref } from 'vue';
 import {
   getTableData,
-  getCountData
+  getCountData,
+  getEchartsData
 } from '/CS/vue_manage/vite-project/src/api/api';
+import * as echarts from 'echarts';
 const tableLabel = {
   name: '课程',
   todayBuy: '今日购买',
@@ -82,21 +104,71 @@ const tableLabel = {
 };
 const tableData = ref([]);
 const countData = ref<any[]>([]);
-// const getTableList = async () => {
-//   await axios
-//     .get(
-//       'https://mock.presstime.cn/mock/65d36e6ca07c65d1ba4511c4/api/home/getTableData'
-//     )
-//     .then((res) => {
-//       console.log(res);
-//       tableData.value = res.data.data.tableData;
-//     });
-// };
+const echartData = ref<any>({});
+const echartLData = ref<any[]>([]);
+const echartRData = ref<any[]>([]);
+const getChartData = async () => {
+  let tempData = await getEchartsData({});
+  console.log(tempData);
+  echartData.value = tempData.orderData;
+  echartLData.value = tempData.userData;
+  echartRData.value = tempData.videoData;
+
+  const keyArray = Object.keys(echartData.value.data[0]);
+  const series = [];
+  keyArray.forEach((key) => {
+    series.push({
+      name: key,
+      data: echartData.value.data.map((item) => item[key]),
+      type: 'line'
+    });
+  });
+  let lineChart = echarts.init(document.getElementById('echart'));
+  lineChart.setOption({
+    xAxis: {
+      data: echartData.value.date
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: series
+  });
+  let Lechart = echarts.init(document.getElementById('Lechart'));
+  Lechart.setOption({
+    xAxis: {
+      data: echartLData.value.map((item) => item.date)
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name: '新增用户',
+        data: echartLData.value.map((item) => item.new),
+        type: 'bar'
+      },
+      {
+        name: '活跃用户',
+        data: echartLData.value.map((item) => item.active),
+        type: 'bar'
+      }
+    ]
+  });
+  let Rechart = echarts.init(document.getElementById('Rechart'));
+  Rechart.setOption({
+    series: [
+      {
+        type: 'pie',
+        data: echartRData.value
+      }
+    ]
+  });
+};
 
 onMounted(async () => {
   tableData.value = await getTableData({});
   countData.value = await getCountData({});
-  console.log(countData);
+  getChartData();
 });
 </script>
 <style lang="scss" scoped>
@@ -129,9 +201,7 @@ onMounted(async () => {
     }
   }
 }
-.flex {
-  display: flex;
-}
+
 .count-card-list {
   flex-wrap: wrap;
   justify-content: space-between;
@@ -160,5 +230,9 @@ onMounted(async () => {
     height: 60px;
     padding: 10px;
   }
+}
+.small-charts {
+  justify-content: space-between;
+  margin-top: 20px;
 }
 </style>

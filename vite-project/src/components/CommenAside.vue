@@ -13,7 +13,10 @@
         :key="item.path"
         @click="clickMenu(item)"
       >
-        <component class="icons" :is="item.icon"></component>
+        <component
+          class="icons"
+          :is="item.icon"
+        ></component>
         <span>{{ item.label }}</span>
       </el-menu-item>
       <el-sub-menu
@@ -23,7 +26,10 @@
         :key="item.path"
       >
         <template #title>
-          <component class="icons" :is="item.icon"></component>
+          <component
+            class="icons"
+            :is="item.icon"
+          ></component>
           <span>{{ item.label }}</span>
         </template>
         <el-menu-item-group>
@@ -33,7 +39,10 @@
             :index="subItem.path"
             @click="clickMenu(subItem)"
           >
-            <component class="icons" :is="subItem.icon"></component>
+            <component
+              class="icons"
+              :is="subItem.icon"
+            ></component>
             <span>{{ subItem.label }}</span>
           </el-menu-item>
         </el-menu-item-group>
@@ -43,40 +52,42 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 export default {
   setup() {
+    const store = useStore();
     const router = useRouter();
     const list = [
       {
-        path: "/user",
-        name: "user",
-        label: "用户管理",
-        icon: "user",
-        url: "UserManage/UserManage",
+        path: '/user',
+        name: 'user',
+        label: '用户管理',
+        icon: 'user',
+        url: 'UserManage/UserManage'
       },
       {
-        path: "/other",
-        name: "other",
-        label: "其他",
-        icon: "location",
+        path: '/other',
+        name: 'other',
+        label: '其他',
+        icon: 'location',
         children: [
           {
-            path: "/page1",
-            name: "page1",
-            label: "页面1",
-            icon: "setting",
-            url: "Other/PageOne",
+            path: '/page1',
+            name: 'page1',
+            label: '页面1',
+            icon: 'setting',
+            url: 'Other/PageOne'
           },
           {
-            path: "/page2",
-            name: "page2",
-            label: "页面2",
-            icon: "setting",
-            url: "Other/PageTwo",
-          },
-        ],
-      },
+            path: '/page2',
+            name: 'page2',
+            label: '页面2',
+            icon: 'setting',
+            url: 'Other/PageTwo'
+          }
+        ]
+      }
     ];
     const noChildren = () => {
       return list.filter((item) => !item.children);
@@ -87,16 +98,17 @@ export default {
     };
     const clickMenu = (item) => {
       router.push({
-        name: item.name,
+        name: item.name
       });
+      store.commit('selectMenu', item);
     };
     return {
       list,
       noChildren,
       hasChildren,
-      clickMenu,
+      clickMenu
     };
-  },
+  }
 };
 </script>
 

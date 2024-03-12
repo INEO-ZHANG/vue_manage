@@ -1,15 +1,33 @@
 <template>
   <el-header>
     <div class="l-content">
-      <el-button size="small" @click="handleCollapse">
+      <el-button
+        size="small"
+        @click="handleCollapse"
+      >
         <el-icon :size="20"><Menu /></el-icon>
       </el-button>
-      <h3>首页</h3>
+      <el-breadcrumb
+        class="current-menu"
+        separator="/"
+      >
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item
+          v-if="current"
+          :to="{ path: current.path }"
+        >
+          {{ current.label }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
     <div class="r-content">
       <el-dropdown>
         <span class="el-dropdown-link">
-          <img class="user" :src="getImgSrc('user')" alt="" />
+          <img
+            class="user"
+            :src="getImgSrc('user')"
+            alt=""
+          />
         </span>
         <template #dropdown>
           <el-dropdown-menu style="width: 100px height: 200px">
@@ -23,7 +41,8 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 export default {
   setup() {
     let store = useStore();
@@ -31,13 +50,17 @@ export default {
       return new URL(`../assets/images/${user}.jpg`, import.meta.url).href;
     };
     const handleCollapse = () => {
-      store.commit("updateIsCollapse");
+      store.commit('updateIsCollapse');
     };
+    const current = computed(() => {
+      return store.state.currentMenu;
+    });
     return {
       getImgSrc,
       handleCollapse,
+      current
     };
-  },
+  }
 };
 </script>
 
@@ -79,6 +102,12 @@ header {
     color: #fff;
     width: auto;
     align-items: center;
+  }
+}
+.current-menu {
+  & :deep .el-breadcrumb__inner {
+    color: #fff;
+    cursor: pointer !important;
   }
 }
 </style>

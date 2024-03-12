@@ -4,6 +4,7 @@
       <commen-aside class="el-aside" />
       <el-container class="r-container">
         <commen-header />
+        <CommenTag />
         <el-main>
           <router-view />
         </el-main>
@@ -13,8 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import CommenHeader from "../components/CommenHeader.vue";
-import CommenAside from "../components/CommenAside.vue";
+import CommenHeader from '../components/CommenHeader.vue';
+import CommenAside from '../components/CommenAside.vue';
+import CommenTag from '../components/CommenTag.vue';
 </script>
 
 <style lang="scss" scoped>

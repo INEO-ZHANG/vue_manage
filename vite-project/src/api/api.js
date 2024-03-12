@@ -31,3 +31,31 @@ export const getCountData = (params) => {
     mock: true
   });
 };
+
+/**
+ * 首页Count数据
+ * @param {} params
+ * @returns
+ */
+export const getEchartsData = (params) => {
+  return request({
+    url: 'home/getEchartsData',
+    method: 'get',
+    data: params,
+    mock: true
+  });
+};
+
+/**
+ * 用户数据
+ * @param {} params
+ * @returns
+ */
+export const getUserData = (params) => {
+  return request({
+    url: 'home/getUserData',
+    method: 'get',
+    data: params,
+    mock: true
+  });
+};
